@@ -11,8 +11,8 @@ type scoreboardStateInitialType = {
 };
 
 const INITIAL_STATE: scoreboardStateInitialType = {
-  player1Total: 0,
-  player2Total: 0,
+  player1Total: 301,
+  player2Total: 301,
   player1TotalList: [],
   player2TotalList: [],
   turn: 'player1',
