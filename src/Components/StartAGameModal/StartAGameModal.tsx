@@ -13,32 +13,28 @@ import {
   HStack,
   Radio,
 } from '@chakra-ui/react';
-import React, { Dispatch, SetStateAction } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { RootState } from '../../redux/store';
+import { gameSetupActions, scoreboardActions } from '../../redux';
 
-type Props = {
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  player1Name: string;
-  setPlayer1Name: Dispatch<SetStateAction<string>>;
-  player2Name: string;
-  setPlayer2Name: Dispatch<SetStateAction<string>>;
-  gameMode: string;
-  setGameMode: Dispatch<SetStateAction<string>>;
-};
+const StartAGameModal = () => {
+  const dispatch = useDispatch();
 
-const StartAGameModal: React.FC<Props> = ({
-  isOpen,
-  setIsOpen,
-  player1Name,
-  setPlayer1Name,
-  player2Name,
-  setPlayer2Name,
-  gameMode,
-  setGameMode,
-}) => {
+  const { setPlayer1Name, setPlayer2Name, setGameMode, setCloseModal } =
+    bindActionCreators(gameSetupActions, dispatch);
+
+  const { setPlayer1Total, setPlayer2Total, setScoreInputPlaceholder } =
+    bindActionCreators(scoreboardActions, dispatch);
+
+  const startAGameState = useSelector((state: RootState) => state);
+
+  const { gameSetupReducer } = startAGameState;
+  const { player1Name, player2Name, gameMode, closeModal } = gameSetupReducer;
+
   const startGame = () => {
     if (player1Name && player2Name && gameMode) {
-      setIsOpen(false);
+      setCloseModal(true);
     } else {
       alert('You must enter in all the required options to start a game');
     }
@@ -46,7 +42,7 @@ const StartAGameModal: React.FC<Props> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={() => false}>
+      <Modal isOpen={!closeModal} onClose={() => setCloseModal(true)}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Set Up Game</ModalHeader>
@@ -54,14 +50,17 @@ const StartAGameModal: React.FC<Props> = ({
             <FormControl isRequired>
               <FormLabel>Player 1</FormLabel>
               <Input
-                onChange={(event) => setPlayer1Name(event.target.value)}
+                onChange={(event) => {
+                  setPlayer1Name(event?.target.value);
+                  setScoreInputPlaceholder(`${event?.target.value} score`);
+                }}
                 placeholder="Player 1 name"
               />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Player 2</FormLabel>
               <Input
-                onChange={(event) => setPlayer2Name(event.target.value)}
+                onChange={(event) => setPlayer2Name(event?.target.value)}
                 placeholder="Player 2 name"
               />
             </FormControl>
@@ -69,7 +68,11 @@ const StartAGameModal: React.FC<Props> = ({
               <FormLabel as="legend">Game Mode</FormLabel>
               <RadioGroup
                 defaultValue="301"
-                onChange={(value) => setGameMode(value)}
+                onChange={(value) => {
+                  setGameMode(value);
+                  setPlayer1Total(parseInt(value));
+                  setPlayer2Total(parseInt(value));
+                }}
               >
                 <HStack spacing="24px">
                   <Radio value="301">301</Radio>

@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Button,
   Grid,
@@ -12,6 +12,9 @@ import {
   Tr,
   useMediaQuery,
 } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { scoreboardActions } from '../../redux';
 import {
   EnterScoreButtonDiv,
   NumberButton,
@@ -23,36 +26,36 @@ import {
   ScoresTableDiv,
   ScoreStyles,
 } from './Scoreboard.styles';
+import { RootState } from '../../redux/store';
 
-type Props = {
-  player1Name: string;
-  player2Name: string;
-  gameMode: string;
-};
-
-const Scoreboard: React.FC<Props> = ({
-  player1Name,
-  player2Name,
-  gameMode,
-}) => {
-  const [player1Total, setplayer1Total] = useState(parseInt(gameMode));
-  const [player2Total, setplayer2Total] = useState(parseInt(gameMode));
-  const [player1TotalList, setplayer1TotalList] = useState<number[]>([]);
-  const [player2TotalList, setplayer2TotalList] = useState<number[]>([]);
-  const [turn, setTurn] = useState('player1');
-  const [scoreInputPlaceholder, setScoreInputPlaceholder] = useState(
-    `${player1Name} Score`
+const Scoreboard: React.FC = () => {
+  const { gameSetupReducer, scoreboardReducer } = useSelector(
+    (state: RootState) => state
   );
-  const [scoreInputValue, setScoreInputValue] = useState('');
 
-  useEffect(() => {
-    setplayer1Total(parseInt(gameMode));
-    setplayer2Total(parseInt(gameMode));
-  }, [gameMode]);
+  const { player1Name, player2Name } = gameSetupReducer;
 
-  useEffect(() => {
-    setScoreInputPlaceholder(`${player1Name} Score`);
-  }, [player1Name]);
+  const {
+    player1Total,
+    player2Total,
+    player1TotalList,
+    player2TotalList,
+    turn,
+    scoreInputPlaceholder,
+    scoreInputValue,
+  } = scoreboardReducer;
+
+  const dispatch = useDispatch();
+
+  const {
+    setPlayer1Total,
+    setPlayer2Total,
+    setPlayer1TotalList,
+    setPlayer2TotalList,
+    setTurn,
+    setScoreInputPlaceholder,
+    setScoreInputValue,
+  } = bindActionCreators(scoreboardActions, dispatch);
 
   const playerScores = player1TotalList.map((score, index) => (
     <Tr key={`scoreRow-${index}`}>
@@ -111,18 +114,16 @@ const Scoreboard: React.FC<Props> = ({
   const changeTurn = (score: any) => {
     switch (turn) {
       case 'player1':
-        player1TotalList.push(score);
-        setplayer1TotalList(player1TotalList);
+        setPlayer1TotalList(score);
         setTurn('player2');
         setScoreInputPlaceholder(`${player2Name} score`);
-        setplayer1Total(player1Total - score);
+        setPlayer1Total(player1Total - score);
         break;
       case 'player2':
-        player2TotalList.push(score);
-        setplayer2TotalList(player2TotalList);
+        setPlayer2TotalList(score);
         setTurn('player1');
         setScoreInputPlaceholder(`${player1Name} score`);
-        setplayer2Total(player2Total - score);
+        setPlayer2Total(player2Total - score);
         break;
     }
 
@@ -142,6 +143,8 @@ const Scoreboard: React.FC<Props> = ({
         `Well done, ${playerName}! You have won! Click "ok" to restart game.`
       );
       window.location.reload();
+    } else if (!score) {
+      changeTurn(0);
     } else {
       changeTurn(score);
     }
