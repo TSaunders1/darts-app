@@ -81,7 +81,7 @@ const Scoreboard: React.FC = () => {
     );
   }
 
-  const numberButtonClick = (value: any) => {
+  const numberButtonClick = (value: number) => {
     setScoreInputValue(`${scoreInputValue}${value}`);
   };
 
@@ -111,7 +111,7 @@ const Scoreboard: React.FC = () => {
     );
   };
 
-  const changeTurn = (score: any) => {
+  const changeTurn = (score: number) => {
     switch (turn) {
       case 'player1':
         setPlayer1TotalList(score);
