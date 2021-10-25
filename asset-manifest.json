@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/darts-app/static/css/main.efb579ee.chunk.css",
+    "main.js": "/darts-app/static/js/main.f112c3eb.chunk.js",
+    "main.js.map": "/darts-app/static/js/main.f112c3eb.chunk.js.map",
+    "runtime-main.js": "/darts-app/static/js/runtime-main.3896b2c9.js",
+    "runtime-main.js.map": "/darts-app/static/js/runtime-main.3896b2c9.js.map",
+    "static/js/2.6ba55942.chunk.js": "/darts-app/static/js/2.6ba55942.chunk.js",
+    "static/js/2.6ba55942.chunk.js.map": "/darts-app/static/js/2.6ba55942.chunk.js.map",
+    "static/js/3.ab24b7d7.chunk.js": "/darts-app/static/js/3.ab24b7d7.chunk.js",
+    "static/js/3.ab24b7d7.chunk.js.map": "/darts-app/static/js/3.ab24b7d7.chunk.js.map",
+    "index.html": "/darts-app/index.html",
+    "static/css/main.efb579ee.chunk.css.map": "/darts-app/static/css/main.efb579ee.chunk.css.map",
+    "static/js/2.6ba55942.chunk.js.LICENSE.txt": "/darts-app/static/js/2.6ba55942.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3896b2c9.js",
+    "static/js/2.6ba55942.chunk.js",
+    "static/css/main.efb579ee.chunk.css",
+    "static/js/main.f112c3eb.chunk.js"
+  ]
+}
